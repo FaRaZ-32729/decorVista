@@ -2,6 +2,7 @@ require("dotenv/config");
 const db_Connection = require("./models/dbConnectionString");
 const userRouter = require("./routes/userRouter");
 const authRouter = require("./routes/authRouter");
+const productRouter = require("./routes/productRouter");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
@@ -18,6 +19,7 @@ app.use(cookieParser());
 //routes
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
+app.use("/product", productRouter);
 
 
 app.listen(PORT, () => {
