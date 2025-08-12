@@ -1,21 +1,42 @@
 const productSchema = require("../models/productSchema");
 
-
 const createProduct = async (req, res) => {
     try {
         const { name, category, brand, price, description } = req.body;
 
-        if (!name || !category || !price) {
-            return res.status(400).json({ success: false, message: "Name, Category, and Price are required" });
+        if (!name || !category || !brand || !price || !description) {
+            return res.status(400).json({
+                success: false,
+                message: "Name, Category, Brand, Price, and Description are required"
+            });
         }
 
-        const product = await productSchema.create({ name, category, brand, price, description });
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "Product image is required" });
+        }
 
-        return res.status(201).json({ success: true, message: "Product Created Successfully", product });
+        const imageUrl = `/images/${req.file.filename}`;
+
+        const product = await productSchema.create({
+            name,
+            category,
+            brand,
+            price,
+            description,
+            image: imageUrl
+        });
+
+        return res.status(201).json({
+            success: true,
+            message: "Product Created Successfully",
+            product
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 };
+
+module.exports = { createProduct };
 
 
 const getAllProducts = async (req, res) => {

@@ -1,95 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Title from '../../components/Title';
 import { IoMdCloudUpload } from "react-icons/io";
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const API_URL = import.meta.env.VITE_Node_Api_Url;
 
 const AddProduct = () => {
+    const [image, setImage] = useState(null);
+    const [inputs, setInputs] = useState({
+        name: '',
+        category: '',
+        brand: '',
+        price: '',
+        description: ''
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!image) {
+            toast.error("Please upload a product image");
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("name", inputs.name);
+            formData.append("category", inputs.category);
+            formData.append("brand", inputs.brand);
+            formData.append("price", inputs.price);
+            formData.append("description", inputs.description);
+            formData.append("image", image);
+
+            const res = await axios.post(`${API_URL}/product`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+
+            toast.success(res.data.message);
+            setInputs({ name: '', category: '', brand: '', price: '', description: '' });
+            setImage(null);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Error adding product");
+        }
+    };
+
     return (
         <div>
-            <form>
-                <Title
-                    align="left"
-                    title="Add Product"
-                    subTitle="Start adding details to showcase your new clothing item."
-                />
+            <form onSubmit={handleSubmit}>
+                <Title align="left" title="Add Product" subTitle="Start adding details to showcase your new clothing item." />
 
                 {/* Image Upload */}
                 <p className='text-gray-800 mt-10'>Product Image</p>
                 <div className='my-2'>
                     <label htmlFor="productImage">
-                        {/* <img
-                            className='h-32 w-32 object-contain border border-gray-300 rounded cursor-pointer'
-                            src="https://via.placeholder.com/150?text=Upload"
-                            alt="Upload"
-                        /> */}
-                        <IoMdCloudUpload className='h-32 w-32 object-contain border border-gray-300 rounded cursor-pointer '/>
+                        {image ? (
+                            <img
+                                src={URL.createObjectURL(image)}
+                                alt="Preview"
+                                className='h-32 w-32 object-cover border border-gray-300 rounded'
+                            />
+                        ) : (
+                            <IoMdCloudUpload className='h-32 w-32 object-contain border border-gray-300 rounded cursor-pointer' />
+                        )}
                         <input
                             type="file"
                             accept="image/*"
                             id="productImage"
                             hidden
+                            onChange={(e) => setImage(e.target.files[0])}
                         />
                     </label>
                 </div>
 
-                {/* Product Name */}
+                {/* Name */}
                 <div className="mt-6">
                     <p className="text-gray-800">Product Name</p>
                     <input
                         type="text"
                         placeholder="Enter product name"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
+                        value={inputs.name}
+                        onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
                     />
                 </div>
 
-                {/* Small Description */}
+                {/* Brand */}
                 <div className="mt-4">
-                    <p className="text-gray-800">Small Description</p>
+                    <p className="text-gray-800">Brand</p>
                     <input
                         type="text"
-                        placeholder="Enter a short description"
+                        placeholder="Enter brand name"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
-                    />
-                </div>
-
-                {/* Price */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Price</p>
-                    <input
-                        type="number"
-                        placeholder="Enter product price"
-                        className="border border-gray-300 rounded p-2 w-full mt-1"
-                    />
-                </div>
-
-                {/* Detailed Description */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Detailed Description</p>
-                    <textarea
-                        rows={4}
-                        placeholder="Enter detailed description"
-                        className="border border-gray-300 rounded p-2 w-full mt-1"
-                    ></textarea>
-                </div>
-
-                {/* Star Rating */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Star Rating (out of 5)</p>
-                    <input
-                        type="number"
-                        min={0}
-                        max={5}
-                        placeholder="0"
-                        className="border border-gray-300 rounded p-2 w-24 mt-1"
-                    />
-                </div>
-
-                {/* Reviews */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Reviews (Number)</p>
-                    <input
-                        type="number"
-                        placeholder="0"
-                        className="border border-gray-300 rounded p-2 w-24 mt-1"
+                        value={inputs.brand}
+                        onChange={(e) => setInputs({ ...inputs, brand: e.target.value })}
                     />
                 </div>
 
@@ -100,24 +104,37 @@ const AddProduct = () => {
                         type="text"
                         placeholder="e.g., Men, Women, Kids"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
+                        value={inputs.category}
+                        onChange={(e) => setInputs({ ...inputs, category: e.target.value })}
                     />
                 </div>
 
-                {/* Sizes */}
+                {/* Price */}
                 <div className="mt-4">
-                    <p className="text-gray-800">Available Sizes</p>
-                    <div className="flex gap-4 flex-wrap text-gray-700 mt-1">
-                        {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
-                            <label key={size} className="flex items-center gap-1">
-                                <input type="checkbox" />
-                                {size}
-                            </label>
-                        ))}
-                    </div>
+                    <p className="text-gray-800">Price</p>
+                    <input
+                        type="number"
+                        placeholder="Enter product price"
+                        className="border border-gray-300 rounded p-2 w-full mt-1"
+                        value={inputs.price}
+                        onChange={(e) => setInputs({ ...inputs, price: e.target.value })}
+                    />
+                </div>
+
+                {/* Description */}
+                <div className="mt-4">
+                    <p className="text-gray-800">Detailed Description</p>
+                    <textarea
+                        rows={4}
+                        placeholder="Enter detailed description"
+                        className="border border-gray-300 rounded p-2 w-full mt-1"
+                        value={inputs.description}
+                        onChange={(e) => setInputs({ ...inputs, description: e.target.value })}
+                    ></textarea>
                 </div>
 
                 <button
-                    type="button"
+                    type="submit"
                     className='bg-blue-600 text-white px-8 py-2 rounded mt-8 mb-20 cursor-pointer'
                 >
                     Add Product
