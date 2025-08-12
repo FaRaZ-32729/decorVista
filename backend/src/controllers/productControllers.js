@@ -1,4 +1,3 @@
-// controllers/productController.js
 const productSchema = require("../models/productSchema");
 
 

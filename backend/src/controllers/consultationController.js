@@ -1,19 +1,21 @@
-const consultationModel = require("../models/consultationSchema");
-
-// @desc    Create a consultation (Homeowner)
+const consultationModel = require("../models/consultationSchema")
+//  Create a consultation (Homeowner)
 const createConsultation = async (req, res) => {
     try {
-        const { designerId, scheduledDateTime, number, address } = req.body;
+        const { userId, designerId, scheduledDateTime, number, address, status } = req.body;
+        console.log(req.body)
 
         if (!designerId || !scheduledDateTime || !number || !address) {
             return res.status(400).json({ success: false, message: "All fields are required" });
         }
 
-        const consultation = await Consultation.create({
-            userId: req.authenticatedUser._id,
+        const consultation = await consultationModel.create({
+            // userId: req.authenticatedUser._id,
+            userId,
             designerId,
             scheduledDateTime,
             number,
+            status,
             address
         });
 
@@ -23,14 +25,13 @@ const createConsultation = async (req, res) => {
     }
 };
 
-// @desc    Get consultations for a designer
+//  Get consultations for a designer
 const getConsultationsByDesigner = async (req, res) => {
     try {
         const { id } = req.params; // Designer ID
         const consultations = await consultationModel.find({ designerId: id })
             .populate("userId", "name email")
             .sort({ scheduledDateTime: 1 });
-
         return res.status(200).json({ success: true, consultations });
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -38,7 +39,7 @@ const getConsultationsByDesigner = async (req, res) => {
 };
 
 // @desc    Get consultations for a homeowner
-const getConsultationsByUser = async (req, res) => {
+const getConsultationsByOwner = async (req, res) => {
     try {
         const { id } = req.params; // Homeowner ID
         const consultations = await consultationModel.find({ userId: id })
@@ -51,8 +52,8 @@ const getConsultationsByUser = async (req, res) => {
     }
 };
 
-// @desc    Update consultation status (Designer only)
-const updateConsultationStatus = async (req, res) => {
+// Update consultation status (Designer only)
+const updateConsultation = async (req, res) => {
     try {
         const { id } = req.params;
         const { status, number, address } = req.body;
@@ -86,7 +87,7 @@ const updateConsultationStatus = async (req, res) => {
 };
 
 
-// @desc    Delete a consultation (Designer or Homeowner)
+// Delete a consultation (Designer or Homeowner)
 const deleteConsultation = async (req, res) => {
     try {
         const { id } = req.params;
@@ -94,7 +95,7 @@ const deleteConsultation = async (req, res) => {
         const consultation = await consultationModel.findById(id);
         if (!consultation) return res.status(404).json({ success: false, message: "Consultation not found" });
 
-        await Consultation.findByIdAndDelete(id);
+        await consultationModel.findByIdAndDelete(id);
 
         return res.status(200).json({ success: true, message: "Consultation deleted successfully" });
     } catch (error) {
@@ -105,7 +106,7 @@ const deleteConsultation = async (req, res) => {
 module.exports = {
     createConsultation,
     getConsultationsByDesigner,
-    getConsultationsByUser,
-    updateConsultationStatus,
+    getConsultationsByOwner,
+    updateConsultation,
     deleteConsultation
 };
