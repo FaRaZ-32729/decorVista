@@ -1,10 +1,61 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Title from '../../components/Title';
+import { ProductContext } from '../../contextApi/ProductContext';
+
+const API_URL = import.meta.env.VITE_Node_Api_Url;
 
 const UpdateProduct = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [image, setImage] = useState(null);
+    const { fetchProducts } = useContext(ProductContext);
+    const [productData, setProductData] = useState({
+        name: "",
+        category: "",
+        brand: "",
+        price: "",
+        description: "",
+        image: ""
+    });
+
+    // Fetch product data
+    useEffect(() => {
+        axios.get(`${API_URL}/product/${id}`)
+            .then(res => setProductData(res.data.product))
+            .catch(() => toast.error("Failed to load product"));
+    }, [id]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("name", productData.name);
+        formData.append("category", productData.category);
+        formData.append("brand", productData.brand);
+        formData.append("price", productData.price);
+        formData.append("description", productData.description);
+        if (image) {
+            formData.append("image", image); // Only append if updated
+        }
+
+        try {
+            await axios.put(`${API_URL}/product/${id}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            toast.success("Product updated successfully");
+            navigate("/all-products");
+            fetchProducts();
+        } catch (error) {
+            toast.error("Failed to update product");
+        }
+    };
+
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <Title align="left" title="Update Product" subTitle="Edit the product details" />
 
                 {/* Image Upload */}
@@ -13,14 +64,15 @@ const UpdateProduct = () => {
                     <label htmlFor="productImage">
                         <img
                             className='h-32 w-32 object-contain border border-gray-300 rounded cursor-pointer'
-                            src="https://via.placeholder.com/150?text=Product"
-                            alt="Upload"
+                            src={image ? URL.createObjectURL(image) : `${API_URL}${productData.image}`}
+                            alt="Product"
                         />
                         <input
                             type="file"
                             accept="image/*"
                             id="productImage"
                             hidden
+                            onChange={e => setImage(e.target.files[0])}
                         />
                     </label>
                 </div>
@@ -32,18 +84,32 @@ const UpdateProduct = () => {
                         type="text"
                         placeholder="Enter product name"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
-                        defaultValue="Example Product"
+                        value={productData.name}
+                        onChange={e => setProductData({ ...productData, name: e.target.value })}
                     />
                 </div>
 
-                {/* Small Description */}
+                {/* Brand */}
                 <div className="mt-4">
-                    <p className="text-gray-800">Small Description</p>
+                    <p className="text-gray-800">Brand</p>
                     <input
                         type="text"
-                        placeholder="Enter a short description"
+                        placeholder="Enter brand name"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
-                        defaultValue="Short product description"
+                        value={productData.brand}
+                        onChange={e => setProductData({ ...productData, brand: e.target.value })}
+                    />
+                </div>
+
+                {/* Price */}
+                <div className="mt-4">
+                    <p className="text-gray-800">Price</p>
+                    <input
+                        type="number"
+                        placeholder="Enter product price"
+                        className="border border-gray-300 rounded p-2 w-full mt-1"
+                        value={productData.price}
+                        onChange={e => setProductData({ ...productData, price: e.target.value })}
                     />
                 </div>
 
@@ -54,32 +120,9 @@ const UpdateProduct = () => {
                         rows={4}
                         placeholder="Enter detailed description"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
-                        defaultValue="This is a detailed product description."
+                        value={productData.description}
+                        onChange={e => setProductData({ ...productData, description: e.target.value })}
                     ></textarea>
-                </div>
-
-                {/* Star Rating */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Star Rating (out of 5)</p>
-                    <input
-                        type="number"
-                        min={0}
-                        max={5}
-                        placeholder="0"
-                        className="border border-gray-300 rounded p-2 w-24 mt-1"
-                        defaultValue={4}
-                    />
-                </div>
-
-                {/* Reviews */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Reviews (Number)</p>
-                    <input
-                        type="number"
-                        placeholder="0"
-                        className="border border-gray-300 rounded p-2 w-24 mt-1"
-                        defaultValue={23}
-                    />
                 </div>
 
                 {/* Category */}
@@ -89,24 +132,15 @@ const UpdateProduct = () => {
                         type="text"
                         placeholder="e.g., Men, Women, Kids"
                         className="border border-gray-300 rounded p-2 w-full mt-1"
-                        defaultValue="Men"
+                        value={productData.category}
+                        onChange={e => setProductData({ ...productData, category: e.target.value })}
                     />
                 </div>
 
-                {/* Sizes */}
-                <div className="mt-4">
-                    <p className="text-gray-800">Available Sizes</p>
-                    <div className="flex gap-4 flex-wrap text-gray-700 mt-1">
-                        {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
-                            <label key={size} className="flex items-center gap-1">
-                                <input type="checkbox" defaultChecked={size === 'M' || size === 'L'} />
-                                {size}
-                            </label>
-                        ))}
-                    </div>
-                </div>
-
-                <button type="submit" className='bg-green-600 text-white px-8 py-2 rounded mt-8 mb-20 cursor-pointer'>
+                <button
+                    type="submit"
+                    className='bg-green-600 text-white px-8 py-2 rounded mt-8 mb-20 cursor-pointer'
+                >
                     Update Product
                 </button>
             </form>

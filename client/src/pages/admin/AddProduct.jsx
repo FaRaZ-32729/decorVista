@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Title from '../../components/Title';
 import { IoMdCloudUpload } from "react-icons/io";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { ProductContext } from '../../contextApi/ProductContext';
+import { useNavigate } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 
 const AddProduct = () => {
+    const navigate = useNavigate();
+    const { fetchProducts } = useContext(ProductContext);
     const [image, setImage] = useState(null);
     const [inputs, setInputs] = useState({
         name: '',
@@ -40,6 +44,8 @@ const AddProduct = () => {
             toast.success(res.data.message);
             setInputs({ name: '', category: '', brand: '', price: '', description: '' });
             setImage(null);
+            fetchProducts();
+            navigate("/all-products");
         } catch (error) {
             toast.error(error.response?.data?.message || "Error adding product");
         }

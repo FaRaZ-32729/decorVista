@@ -4,6 +4,7 @@ const userRouter = require("./routes/userRouter");
 const authRouter = require("./routes/authRouter");
 const productRouter = require("./routes/productRouter");
 const consultationRouter = require("./routes/consultationRouter");
+const path = require("path");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -20,6 +21,7 @@ app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 
 //routes

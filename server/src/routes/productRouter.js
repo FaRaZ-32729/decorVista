@@ -3,10 +3,10 @@ const { createProduct, getAllProducts, getSingleProduct, updateProduct, deletePr
 const uploadFile = require("../middleware/multerMiddleware");
 const router = express.Router()
 
-router.post("/", uploadFile ,createProduct);
+router.post("/", uploadFile, createProduct);
 router.get("/", getAllProducts);
 router.get("/:id", getSingleProduct);
-router.put("/:id", updateProduct);
+router.put("/:id", uploadFile, updateProduct);
 router.delete("/:id", deleteProduct);
 
 module.exports = router;
