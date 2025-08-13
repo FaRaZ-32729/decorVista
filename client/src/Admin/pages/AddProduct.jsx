@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import Title from '../../components/Title';
+import Title from '../components/Title';
 import { IoMdCloudUpload } from "react-icons/io";
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { ProductContext } from '../../contextApi/ProductContext';
 import { useNavigate } from 'react-router-dom';
+import { ProductContext } from '../../contextApi/ProductContext';
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 

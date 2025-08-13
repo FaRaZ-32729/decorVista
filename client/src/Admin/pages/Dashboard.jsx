@@ -1,7 +1,7 @@
 import React from 'react';
-import Title from '../../components/Title';
 import { Trash2 } from 'lucide-react';
 import { SiVirustotal } from "react-icons/si";
+import Title from '../components/Title';
 
 const Dashboard = () => {
   const users = [

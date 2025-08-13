@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Title from '../../components/Title';
+import Title from '../components/Title';
 import { ProductContext } from '../../contextApi/ProductContext';
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;

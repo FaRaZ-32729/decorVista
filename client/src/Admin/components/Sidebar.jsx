@@ -6,9 +6,9 @@ import { FaThList } from "react-icons/fa";
 
 const Sidebar = () => {
     const SideBarLinks = [
-        { name: "Dashboard", path: "/", icon: <FaHome className='h-5 w-5'/> },
-        { name: "Add-Product", path: "/add-product", icon: <MdLibraryAdd className='h-5 w-5'/> },
-        { name: "All-Products", path: "/all-products", icon: <FaThList className='h-5 w-5'/> },
+        { name: "Dashboard", path: "/admin", icon: <FaHome className='h-5 w-5' /> },
+        { name: "Add-Product", path: "/admin/add-product", icon: <MdLibraryAdd className='h-5 w-5' /> },
+        { name: "All-Products", path: "/admin/all-products", icon: <FaThList className='h-5 w-5' /> },
     ]
 
     return (
