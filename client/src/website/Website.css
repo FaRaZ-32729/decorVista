@@ -741,7 +741,7 @@
         z-index: 10;
     }
 
-    .filter-options a {
+    .filter-options button {
         padding: 10px 15px;
         text-decoration: none;
         color: #333;

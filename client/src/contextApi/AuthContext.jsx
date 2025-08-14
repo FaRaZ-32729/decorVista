@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    console.log(user)
 
 
     const fetchProfile = async () => {
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     // console.log(user.name)
     const logout = async () => {
         try {
-            await axios.delete(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+            await axios.delete(`${API_URL}/auth/logout`, { withCredentials: true });
             setUser(null);
             toast.success("Logged out successfully");
             navigate("/")

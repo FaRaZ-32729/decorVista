@@ -45,7 +45,7 @@ const AddProduct = () => {
             setInputs({ name: '', category: '', brand: '', price: '', description: '' });
             setImage(null);
             fetchProducts();
-            navigate("/all-products");
+            navigate("/admin/all-products");
         } catch (error) {
             toast.error(error.response?.data?.message || "Error adding product");
         }
@@ -140,6 +140,7 @@ const AddProduct = () => {
                 </div>
 
                 <button
+
                     type="submit"
                     className='bg-blue-600 text-white px-8 py-2 rounded mt-8 mb-20 cursor-pointer'
                 >

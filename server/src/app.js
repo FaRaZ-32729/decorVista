@@ -4,6 +4,7 @@ const userRouter = require("./routes/userRouter");
 const authRouter = require("./routes/authRouter");
 const productRouter = require("./routes/productRouter");
 const consultationRouter = require("./routes/consultationRouter");
+const gallreyRouter = require("./routes/savedDesignRouter");
 const path = require("path");
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -29,6 +30,7 @@ app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/consultation", consultationRouter);
+app.use("/gallrey", gallreyRouter);
 
 //PORT
 app.listen(PORT, () => {

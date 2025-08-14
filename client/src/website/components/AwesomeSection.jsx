@@ -1,33 +1,46 @@
-import React from "react";
-import products from "../../data/prodcuts";
+import React, { useContext } from "react";
+import { ProductContext } from "../../contextApi/ProductContext";
+
+const API_URL = import.meta.env.VITE_Node_Api_Url;
 
 const AwesomeSection = ({ title }) => {
+  const { products, loading } = useContext(ProductContext);
+
+  if (loading) {
+    return (
+      <section className="awesome">
+        <h2>{title}</h2>
+        <p>Loading products...</p>
+      </section>
+    );
+  }
+
   return (
     <section className="awesome">
       <h2>{title}</h2>
       <div className="products-row">
-        {products.slice(0, 4).map((product, index) => (
-          <ProductCard key={index} {...product} />
+        {products.slice(0, 4).map((product) => (
+          <ProductCard key={product._id} {...product} />
         ))}
       </div>
       <div className="products-row">
-        {products.slice(0, 4).map((product, index) => (
-          <ProductCard key={index + 4} {...product} />
+        {products.slice(4, 8).map((product) => (
+          <ProductCard key={product._id} {...product} />
         ))}
       </div>
     </section>
   );
 };
 
-const ProductCard = ({ img, title, price }) => {
+const ProductCard = ({ image, name, price }) => {
   return (
     <div className="col-lg-3">
       <div className="single_product_item">
-        <img src={img} width="100%" alt="" />
+        <img src={`${API_URL}${image}`} width="100%" alt={name} />
         <div className="single_product_text">
-          <h4>{title}</h4>
+          <h4>{name}</h4>
           <h3>{price}</h3>
-          <a href="" className="add_cart">
+          <a href="#" className="add_cart">
             + add to cart<i className="ti-heart"></i>
           </a>
         </div>

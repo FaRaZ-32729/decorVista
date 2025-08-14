@@ -4,6 +4,7 @@ import AwesomeSection from "../components/AwesomeSection";
 import OfferSection from "../components/OfferSection";
 import SubscribeSection from "../components/SubscribeSection";
 import BannerSection from "../components/BannnerSection";
+import BestSellers from "../components/BestSellers";
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
       <FeaturedCategory />
       <AwesomeSection title="Awesome" />
       <OfferSection />
-      <AwesomeSection title="Best Seller" />
+      <BestSellers title="Best Seller" />
       <SubscribeSection />
     </>
   );

@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import ListProducts from "./pages/ListProducts";
 import UpdateProduct from ".//pages/UpdateProduct";
+import AddGalleryImage from "./pages/AddGalleryImage";
+import ListGalleryImages from "./pages/ListGalleryImages";
 
 const Admin = () => {
 
@@ -22,7 +24,9 @@ const Admin = () => {
                     <Route element={<AdminLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="add-product" element={<AddProduct />} />
+                        <Route path="add-gallery" element={<AddGalleryImage />} />
                         <Route path="all-products" element={<ListProducts />} />
+                        <Route path="list-gallery" element={<ListGalleryImages />} />
                         <Route path="update-product/:id" element={<UpdateProduct />} />
                     </Route>
                 </Route>

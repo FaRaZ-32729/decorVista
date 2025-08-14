@@ -46,7 +46,7 @@ const UpdateProduct = () => {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             toast.success("Product updated successfully");
-            navigate("/all-products");
+            navigate("/admin/all-products");
             fetchProducts();
         } catch (error) {
             toast.error("Failed to update product");
