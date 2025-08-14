@@ -1,6 +1,8 @@
 import React, { useContext, useState, useMemo } from "react";
 import HeroSection from "../components/HeroSection";
 import { ProductContext } from "../../contextApi/ProductContext";
+import { CartContext } from "../../contextApi/CartContext";
+import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 
@@ -92,6 +94,7 @@ const Products = () => {
 
 // Product Card 
 const ProductCard = ({ product }) => {
+  const { addToCart } = useContext(CartContext);
   return (
     <div className="col-lg-3">
       <div className="single_product_item">
@@ -103,7 +106,11 @@ const ProductCard = ({ product }) => {
         <div className="single_product_text">
           <h4>{product.name}</h4>
           <h3>${product.price}</h3>
-          <a href="#" className="add_cart">
+          <a href="#" className="add_cart" onClick={(e) => {
+            e.preventDefault();
+            addToCart(product._id);
+            toast.success(`${product.name} added to cart!`);
+          }}>
             + add to cart
             <i className="ti-heart" />
           </a>

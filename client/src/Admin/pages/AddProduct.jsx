@@ -108,7 +108,7 @@ const AddProduct = () => {
                     <p className="text-gray-800">Category</p>
                     <input
                         type="text"
-                        placeholder="e.g., Men, Women, Kids"
+                        placeholder="e.g., home , office "
                         className="border border-gray-300 rounded p-2 w-full mt-1"
                         value={inputs.category}
                         onChange={(e) => setInputs({ ...inputs, category: e.target.value })}

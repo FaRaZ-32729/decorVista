@@ -6,6 +6,7 @@ const productRouter = require("./routes/productRouter");
 const consultationRouter = require("./routes/consultationRouter");
 const designRouter = require("./routes/savedDesignRouter");
 const favDesignRouter = require("./routes/favouriteDesignRouter");
+const cartRouter = require("./routes/cartRouter");
 const path = require("path");
 const express = require("express");
 const cookieParser = require("cookie-parser");
@@ -32,7 +33,8 @@ app.use("/auth", authRouter);
 app.use("/product", productRouter);
 app.use("/consultation", consultationRouter);
 app.use("/gallrey", designRouter);
-app.use("/favdesign", favDesignRouter)
+app.use("/favdesign", favDesignRouter);
+app.use("/cart", cartRouter)
 
 //PORT
 app.listen(PORT, () => {

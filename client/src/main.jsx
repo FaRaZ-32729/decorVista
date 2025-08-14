@@ -7,19 +7,22 @@ import { ProductProvider } from './contextApi/ProductContext.jsx'
 import { AuthProvider } from './contextApi/AuthContext.jsx'
 import GalleryProvider, { GalleryContext } from './contextApi/GalleryContext.jsx'
 import FavouriteProvider from './contextApi/FavouriteContext.jsx'
+import CartProvider from './contextApi/CartContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <StrictMode>
       <AuthProvider>
-        <GalleryProvider>
-          <ProductProvider>
-            <FavouriteProvider>
-              <App />
-            </FavouriteProvider>
-          </ProductProvider>
-        </GalleryProvider>
+        <CartProvider>
+          <GalleryProvider>
+            <ProductProvider>
+              <FavouriteProvider>
+                <App />
+              </FavouriteProvider>
+            </ProductProvider>
+          </GalleryProvider>
+        </CartProvider>
       </AuthProvider>
     </StrictMode>
-  </BrowserRouter>
+  </BrowserRouter >
 )
