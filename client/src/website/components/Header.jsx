@@ -3,9 +3,13 @@ import { NavLink } from "react-router-dom";
 import { IoMdLogIn } from "react-icons/io";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { AuthContext } from "../../contextApi/AuthContext";
+import { FavouriteContext } from "../../contextApi/FavouriteContext";
+import { useEffect } from "react";
 
 const Header = ({ title }) => {
   const { user, logout } = useContext(AuthContext);
+
+
   return (
     <section className="header">
       <div className="navbar">
@@ -30,13 +34,34 @@ const Header = ({ title }) => {
           </li>
         </ul>
         <div className="nav-icons">
-          <NavLink to="/favorite">
-            <span className="material-symbols-rounded">favorite</span>
-          </NavLink>
-          <NavLink to="/cart">
-            <span className="material-symbols-rounded">add_shopping_cart</span>
-          </NavLink>
+          {user && (
+            <>
+              <NavLink to="/favorite">
+                <span className="material-symbols-rounded">favorite</span>
+              </NavLink>
+              <NavLink to="/cart">
+                <span className="material-symbols-rounded">add_shopping_cart</span>
+              </NavLink>
+            </>
+          )}
           {!user ? (
+            <NavLink to="/login" className="profile-icon">
+              <IoMdLogIn size={26} />
+            </NavLink>
+          ) : (
+            <div className="profile-dropdown">
+              <FaRegCircleUser className="profile-icon" size={22} />
+              <div className="dropdown-menu">
+                {user.role === "designer" ? (
+                  <NavLink to="/designer-profile">View Profile</NavLink>
+                ) : (
+                  <NavLink to="/profile">View Profile</NavLink>
+                )}
+                <NavLink onClick={logout}>Logout</NavLink>
+              </div>
+            </div>
+          )}
+          {/* {!user ? (
             <NavLink to="/login" className="profile-icon">
               <IoMdLogIn size={26} />
             </NavLink>
@@ -52,7 +77,7 @@ const Header = ({ title }) => {
                 </NavLink>
               </div>
             </div>
-          )}
+          )} */}
           {/* <div className="profile-dropdown">
             <span className="material-symbols-rounded profile-icon">
               account_circle

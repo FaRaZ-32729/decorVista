@@ -13,6 +13,7 @@ import ListProducts from "./pages/ListProducts";
 import UpdateProduct from ".//pages/UpdateProduct";
 import AddGalleryImage from "./pages/AddGalleryImage";
 import ListGalleryImages from "./pages/ListGalleryImages";
+import ProtectedRoute from "../contextApi/ProtectedRoutes";
 
 const Admin = () => {
 
@@ -20,7 +21,11 @@ const Admin = () => {
         <>
 
             <Routes>
-                <Route path="/admin" element={<AdminRoutes />}>
+                <Route path="/admin" element={
+                    <ProtectedRoute allowedRoles={["admin"]}>
+                        <AdminRoutes />
+                    </ProtectedRoute>
+                }>
                     <Route element={<AdminLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="add-product" element={<AddProduct />} />

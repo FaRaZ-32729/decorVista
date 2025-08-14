@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import * as Yup from "yup";
 import { toast } from "react-toastify";
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
@@ -21,11 +22,12 @@ const Signup = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      await signupSchema.validate(formData, { abortEarly: false });
+
       const res = await axios.post(`${API_URL}/user/`, formData);
 
       if (res.data.success) {
@@ -35,9 +37,32 @@ const Signup = () => {
         toast.error(res.data.message || "Registration failed");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      if (error.inner) {
+        // Yup validation errors
+        error.inner.forEach((err) => toast.error(err.message));
+      } else {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      }
     }
   };
+
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const res = await axios.post(`${API_URL}/user/`, formData);
+
+  //     if (res.data.success) {
+  //       toast.success(res.data.message);
+  //       navigate("/login");
+  //     } else {
+  //       toast.error(res.data.message || "Registration failed");
+  //     }
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || "Something went wrong");
+  //   }
+  // };
 
   return (
     <div className="login-section">
@@ -56,6 +81,7 @@ const Signup = () => {
             placeholder="Full Name"
             value={formData.name}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
 
@@ -65,6 +91,7 @@ const Signup = () => {
             placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
 
@@ -74,6 +101,7 @@ const Signup = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
 
@@ -101,3 +129,21 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+const signupSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Name must be at least 3 characters long")
+    .required("Full Name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(8, "Password must be at least 8 characters long")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number")
+    .matches(/[@$!%*?&]/, "Password must contain at least one special character")
+    .required("Password is required"),
+  role: Yup.string().required("Please select a role"),
+});

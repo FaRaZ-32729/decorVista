@@ -28,11 +28,24 @@ const Login = () => {
       const res = await axios.post(`${API_URL}/auth/`, formData, {
         withCredentials: true,
       });
+      console.log("response is", res)
 
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/");
-        fetchProfile();
+
+        await fetchProfile();
+        const role = res.data.existingUser.role;
+
+        if (role === "admin") {
+          navigate("/admin");
+        } else if (role === "owner") {
+          navigate("/");
+        } else if (role === "designer") {
+          navigate("/designer-profile");
+        } else {
+          navigate("/");
+        }
+
       } else {
         toast.error(res.data.message);
       }
@@ -41,12 +54,19 @@ const Login = () => {
     }
   };
 
+
   return (
     <div className="login-section">
       <div className="login-left">
         <h3>New to our Shop?</h3>
         <p>Join us today and explore our amazing products.</p>
         <NavLink to="/signup">Create an Account</NavLink>
+        <div>
+          <p>emil: admin@gmail.com | pass : @Admin12</p>
+          <p>emil: designer@gmail.com | pass : @Designer12</p>
+          <p>emil: owner@gmail.com | pass : @Owner12</p>
+        </div>
+
       </div>
 
       <div className="login-right">
@@ -58,6 +78,7 @@ const Login = () => {
             placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
           <input
@@ -66,11 +87,10 @@ const Login = () => {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
-          <label>
-            <input type="checkbox" /> Remember me
-          </label>
+
           <button type="submit">Log in</button>
           <div className="forgot">
             <a href="#">Forgot Password?</a>

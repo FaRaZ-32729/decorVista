@@ -1,7 +1,8 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
+import { FavouriteContext } from "./FavouriteContext";
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 export const AuthContext = createContext();
@@ -32,7 +33,8 @@ export const AuthProvider = ({ children }) => {
             await axios.delete(`${API_URL}/auth/logout`, { withCredentials: true });
             setUser(null);
             toast.success("Logged out successfully");
-            navigate("/")
+            navigate("/" , replace);
+
         } catch (error) {
             toast.error("Failed to logout");
         }

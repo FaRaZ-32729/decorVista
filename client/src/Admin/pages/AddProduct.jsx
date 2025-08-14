@@ -54,7 +54,7 @@ const AddProduct = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <Title align="left" title="Add Product" subTitle="Start adding details to showcase your new clothing item." />
+                <Title align="left" title="Add Product" subTitle="Start adding details to showcase your new item." />
 
                 {/* Image Upload */}
                 <p className='text-gray-800 mt-10'>Product Image</p>

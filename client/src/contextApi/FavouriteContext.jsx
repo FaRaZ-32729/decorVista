@@ -7,7 +7,7 @@ export const FavouriteContext = createContext();
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 
 export const FavouriteProvider = ({ children }) => {
-    const { user } = useContext(AuthContext); // Get logged-in user
+    const { user } = useContext(AuthContext); 
     const [favourites, setFavourites] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -34,7 +34,7 @@ export const FavouriteProvider = ({ children }) => {
         if (user?._id) {
             fetchFavourites();
         }
-        else{
+        else {
             fetchFavourites([]);
         }
     }, [user]);

@@ -20,6 +20,7 @@ import Profile from "./pages/Profile";
 import DesignerPage from "./pages/DesignerPage";
 import DesignerEdit from "./pages/DesignerEdit";
 import DesignerProfile from "./pages/DesignerProfile";
+import ProtectedRoute from "../contextApi/ProtectedRoutes";
 
 const Website = () => {
     const location = useLocation();
@@ -41,9 +42,23 @@ const Website = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/profile" element={<Profile />} />
-                <Route path="/designer-page" element={<DesignerPage />} />
-                <Route path="/designer-edit" element={<DesignerEdit />} />
-                <Route path="/designer-profile" element={<DesignerProfile />} />
+                <Route path="/designer-page" element={
+                    <ProtectedRoute allowedRoles={["designer"]}>
+                        <DesignerPage />
+                    </ProtectedRoute>
+                } />
+                <Route path="/designer-edit" element={
+                    <ProtectedRoute allowedRoles={["designer"]}>
+                        <DesignerEdit />
+                    </ProtectedRoute>
+
+                } />
+                <Route path="/designer-profile" element={
+                    <ProtectedRoute allowedRoles={[ "designer"]}>
+                        <DesignerProfile />
+                    </ProtectedRoute>
+
+                } />
             </Routes>
 
             {!hideHeaderFooter.includes(location.pathname) && <Footer />}

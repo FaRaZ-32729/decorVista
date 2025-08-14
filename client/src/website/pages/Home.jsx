@@ -5,8 +5,12 @@ import OfferSection from "../components/OfferSection";
 import SubscribeSection from "../components/SubscribeSection";
 import BannerSection from "../components/BannnerSection";
 import BestSellers from "../components/BestSellers";
+import { useEffect } from "react";
+import { FavouriteContext } from "../../contextApi/FavouriteContext";
+import { useContext } from "react";
 
 const Home = () => {
+
   return (
     <>
       <BannerSection />
