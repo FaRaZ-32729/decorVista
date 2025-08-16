@@ -43,9 +43,9 @@ const Website = () => {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/designer-page" element={
-                    <ProtectedRoute allowedRoles={["designer"]}>
+                    // <ProtectedRoute allowedRoles={["designer"]}>
                         <DesignerPage />
-                    </ProtectedRoute>
+                    // </ProtectedRoute>
                 } />
                 <Route path="/designer-edit" element={
                     <ProtectedRoute allowedRoles={["designer"]}>
