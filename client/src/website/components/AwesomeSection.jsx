@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { ProductContext } from "../../contextApi/ProductContext";
+import { NavLink } from "react-router-dom";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const API_URL = import.meta.env.VITE_Node_Api_Url;
 
@@ -40,9 +42,9 @@ const ProductCard = ({ image, name, price }) => {
         <div className="single_product_text">
           <h4>{name}</h4>
           <h3>{price}</h3>
-          <a href="#" className="add_cart">
-            + add to cart<i className="ti-heart"></i>
-          </a>
+          <NavLink to="/products" className="add_cart">
+            see more
+          </NavLink>
         </div>
       </div>
     </div>

@@ -9,17 +9,18 @@ const createReview = async (req, res) => {
             return res.status(400).json({ success: false, message: "Comment and rating are required" });
         }
 
-        const review = await reviewModel.create({
+        let review = await reviewModel.create({
             userId: req.authenticatedUser._id,
             productId,
             designerId,
             comment,
             rating
         });
-
+        review = await review.populate("userId", "name email");
         return res.status(201).json({ success: true, review });
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
+    } catch (err) {
+        console.error("Create Review Error:", err.response?.data || err.message);
+        setError(err.response?.data?.message || "Something went wrong");
     }
 };
 

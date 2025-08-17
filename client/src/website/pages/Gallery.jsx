@@ -11,7 +11,7 @@ const Gallery = () => {
   const { gallery, loading, fetchGallery } = useContext(GalleryContext);
   const { user } = useContext(AuthContext);
 
-  const [favouriteIds, setFavouriteIds] = useState([]); // Track locally added favourites
+  const [favouriteIds, setFavouriteIds] = useState([]);
 
   useEffect(() => {
     fetchGallery();
